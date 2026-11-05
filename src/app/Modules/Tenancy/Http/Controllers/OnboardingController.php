@@ -2,15 +2,19 @@
 
 namespace App\Modules\Tenancy\Http\Controllers;
 
+use App\Modules\Identity\Models\User;
 use App\Modules\Identity\Support\AuthenticationRedirector;
-use App\Modules\Tenancy\Models\Organization;
 use App\Modules\Tenancy\Models\Invitation;
+use App\Modules\Tenancy\Models\Membership;
+use App\Modules\Tenancy\Models\Organization;
 use App\Modules\Tenancy\Services\OrganizationProvisioner;
+use App\Shared\Enums\MembershipStatus;
 use App\Shared\Enums\UserRole;
 use App\Shared\Tenancy\TenantContext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class OnboardingController
@@ -100,7 +104,13 @@ class OnboardingController
         OrganizationProvisioner $provisioner,
         TenantContext $context,
     ): RedirectResponse {
-        if ($request->user()?->onboarding_role !== UserRole::Owner->value) {
+        $user = $request->user();
+
+        if (! $user instanceof User) {
+            return redirect()->route('login');
+        }
+
+        if ($user->onboarding_role !== UserRole::Owner->value) {
             return redirect()->route('onboarding.create');
         }
 
@@ -111,12 +121,6 @@ class OnboardingController
         ]);
         $data['plan'] ??= 'free';
 
-        $user = $request->user();
-
-        if ($user === null) {
-            return redirect()->route('login');
-        }
-
         Gate::authorize('create', Organization::class);
 
         $organization = $provisioner->provision($user, $data['name']);
@@ -124,11 +128,11 @@ class OnboardingController
         $organization->save();
 
         // Optional: auto-generate placeholder agents if entered
-        if (!empty($data['agents']) && (int)$data['agents'] > 0) {
-            $agentsCount = min((int)$data['agents'], 50);
+        if (! empty($data['agents']) && (int) $data['agents'] > 0) {
+            $agentsCount = min((int) $data['agents'], 50);
             for ($i = 1; $i <= $agentsCount; $i++) {
-                $agentEmail = 'agent'.$i.'_'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(5)).'@supportflow.test';
-                $agent = \App\Modules\Identity\Models\User::create([
+                $agentEmail = 'agent'.$i.'_'.Str::lower(Str::random(5)).'@supportflow.test';
+                $agent = User::create([
                     'name' => 'Agent '.$i.' ('.$organization->name.')',
                     'email' => $agentEmail,
                     'password' => 'Password123',
@@ -138,11 +142,11 @@ class OnboardingController
                     'is_active' => true,
                 ]);
 
-                \App\Modules\Tenancy\Models\Membership::create([
+                Membership::create([
                     'organization_id' => $organization->getKey(),
                     'user_id' => $agent->getKey(),
-                    'role' => \App\Shared\Enums\UserRole::Agent,
-                    'status' => \App\Shared\Enums\MembershipStatus::Active,
+                    'role' => UserRole::Agent,
+                    'status' => MembershipStatus::Active,
                     'joined_at' => now(),
                 ]);
             }

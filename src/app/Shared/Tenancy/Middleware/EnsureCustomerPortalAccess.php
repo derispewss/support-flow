@@ -14,7 +14,7 @@ class EnsureCustomerPortalAccess
 
     public function handle(Request $request, Closure $next): Response
     {
-        $role = $this->context->role() ?? UserRole::tryFrom($request->user()?->onboarding_role ?? '');
+        $role = $this->context->role() ?? UserRole::tryFrom($request->user()->onboarding_role ?? '');
 
         if ($role === UserRole::Owner) {
             return $this->context->check()

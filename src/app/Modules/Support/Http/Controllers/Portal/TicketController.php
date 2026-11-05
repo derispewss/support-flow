@@ -149,7 +149,7 @@ class TicketController
         return Storage::disk($file->disk)->download($file->path, $file->original_name);
     }
 
-    public function preview(Request $request, int $ticket, int $attachment)
+    public function preview(Request $request, int $ticket, int $attachment): StreamedResponse
     {
         $model = $this->findVisibleTicket($request, $ticket);
 

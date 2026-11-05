@@ -4,8 +4,6 @@ namespace Tests\Feature\Auth;
 
 use App\Modules\Identity\Models\User;
 use App\Modules\Tenancy\Models\Membership;
-use App\Modules\Tenancy\Models\Organization;
-use App\Shared\Enums\UserRole;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
@@ -24,7 +22,7 @@ class RegistrationTest extends TestCase
             ->assertSee('Buat akun gratis');
     }
 
-    public function test_new_user_can_register_and_gets_default_organization(): void
+    public function test_new_user_can_register_and_is_sent_to_onboarding(): void
     {
         Notification::fake();
 
@@ -36,20 +34,15 @@ class RegistrationTest extends TestCase
             'terms' => true,
         ]);
 
-        $response->assertRedirect(route('verification.notice'));
+        $response->assertRedirect(route('onboarding.create'));
         $this->assertAuthenticated();
 
         $user = User::query()->where('email', 'sari@example.com')->firstOrFail();
 
         $this->assertNull($user->email_verified_at);
 
-        $organization = Organization::query()->where('name', 'Ruang Kerja Sari Utami')->firstOrFail();
-
-        $this->assertDatabaseHas('memberships', [
-            'organization_id' => $organization->getKey(),
-            'user_id' => $user->getKey(),
-            'role' => UserRole::Owner->value,
-        ]);
+        $this->assertDatabaseCount('organizations', 0);
+        $this->assertDatabaseCount('memberships', 0);
 
         Notification::assertSentTo($user, VerifyEmail::class);
     }
@@ -65,13 +58,12 @@ class RegistrationTest extends TestCase
             'password_confirmation' => 'Password123',
             'organization_name' => 'PT Andi Jaya',
             'terms' => true,
-        ])->assertRedirect(route('verification.notice'));
+        ])->assertRedirect(route('onboarding.create'));
 
         $user = User::query()->where('email', 'andi@example.com')->firstOrFail();
-        $organization = Organization::query()->where('name', 'PT Andi Jaya')->firstOrFail();
 
-        $this->assertSame($organization->getKey(), $user->memberships()->firstOrFail()->organization_id);
-        $this->assertSame(UserRole::Owner, $user->memberships()->firstOrFail()->role);
+        $this->assertDatabaseCount('organizations', 0);
+        $this->assertDatabaseCount('memberships', 0);
     }
 
     public function test_registration_requires_unique_email(): void
@@ -97,7 +89,7 @@ class RegistrationTest extends TestCase
         ])->assertSessionHasErrors(['password', 'terms']);
     }
 
-    public function test_registration_creates_membership_for_each_registered_user(): void
+    public function test_registration_does_not_create_membership_before_onboarding(): void
     {
         Notification::fake();
 
@@ -109,6 +101,6 @@ class RegistrationTest extends TestCase
             'terms' => true,
         ]);
 
-        $this->assertSame(1, Membership::query()->count());
+        $this->assertSame(0, Membership::query()->count());
     }
 }

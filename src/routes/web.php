@@ -7,6 +7,7 @@ use App\Modules\Identity\Http\Controllers\Auth\GoogleAuthController;
 use App\Modules\Identity\Http\Controllers\Auth\NewPasswordController;
 use App\Modules\Identity\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Modules\Identity\Http\Controllers\Auth\RegisteredUserController;
+use App\Modules\Identity\Http\Controllers\Auth\RoleSelectionController;
 use App\Modules\Identity\Http\Controllers\Auth\VerifyEmailController;
 use App\Modules\KnowledgeBase\Http\Controllers\AdminKnowledgeBaseController;
 use App\Modules\KnowledgeBase\Http\Controllers\PublicKnowledgeBaseController;
@@ -89,7 +90,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/register/role', function () {
         return view('pages.auth.choose-role');
     })->name('register.role');
-    Route::post('/register/role', [App\Modules\Identity\Http\Controllers\Auth\RoleSelectionController::class, 'store'])
+    Route::post('/register/role', [RoleSelectionController::class, 'store'])
         ->name('register.role.store');
 });
 

@@ -17,7 +17,7 @@ class ReportingTest extends TestCase
     public function test_daily_stats_command_aggregates_ticket_metrics(): void
     {
         Carbon::setTestNow('2026-11-03 12:00:00');
-        [$user, $organization] = $this->createTenantUser(UserRole::Agent);
+        [$user, $organization] = $this->createTenantUser(UserRole::Owner);
         Ticket::factory()->forOrganization($organization)->requestedBy($user)->create([
             'created_at' => Carbon::parse('2026-11-02 09:00:00'),
             'first_response_at' => Carbon::parse('2026-11-02 09:30:00'),
@@ -44,11 +44,11 @@ class ReportingTest extends TestCase
 
     public function test_reports_page_and_csv_export_are_tenant_scoped(): void
     {
-        [$user, $organization] = $this->createTenantUser(UserRole::Agent);
+        [$user, $organization] = $this->createTenantUser(UserRole::Owner);
         $ticket = Ticket::factory()->forOrganization($organization)->requestedBy($user)->create([
             'subject' => 'Export this ticket',
         ]);
-        [$otherUser, $otherOrganization] = $this->createTenantUser(UserRole::Agent);
+        [$otherUser, $otherOrganization] = $this->createTenantUser(UserRole::Owner);
         Ticket::factory()->forOrganization($otherOrganization)->requestedBy($otherUser)->create([
             'subject' => 'Do not export this ticket',
         ]);

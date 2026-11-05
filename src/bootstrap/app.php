@@ -1,7 +1,7 @@
 <?php
 
-use App\Shared\Tenancy\Middleware\EnsureOrganization;
 use App\Shared\Tenancy\Middleware\EnsureCustomerPortalAccess;
+use App\Shared\Tenancy\Middleware\EnsureOrganization;
 use App\Shared\Tenancy\Middleware\EnsureUserRole;
 use App\Shared\Tenancy\Middleware\ResolveTenant;
 use Illuminate\Foundation\Application;

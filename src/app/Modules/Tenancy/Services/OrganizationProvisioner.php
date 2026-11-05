@@ -3,6 +3,8 @@
 namespace App\Modules\Tenancy\Services;
 
 use App\Modules\Identity\Models\User;
+use App\Modules\Support\Models\Category;
+use App\Modules\Support\Models\SlaPolicy;
 use App\Modules\Tenancy\Models\Membership;
 use App\Modules\Tenancy\Models\Organization;
 use App\Shared\Enums\MembershipStatus;
@@ -41,7 +43,7 @@ class OrganizationProvisioner
                 ['Pengiriman', 'Status dan kendala pengiriman.'],
                 ['Lainnya', 'Pertanyaan umum di luar kategori lain.'],
             ] as $index => [$name, $description]) {
-                \App\Modules\Support\Models\Category::query()->firstOrCreate(
+                Category::query()->firstOrCreate(
                     [
                         'organization_id' => $organization->getKey(),
                         'slug' => \Str::slug($name),
@@ -69,7 +71,7 @@ class OrganizationProvisioner
             );
 
             // Seed default SLA policies
-            \App\Modules\Support\Models\SlaPolicy::query()->firstOrCreate(
+            SlaPolicy::query()->firstOrCreate(
                 [
                     'organization_id' => $organization->getKey(),
                     'name' => 'Standar',
@@ -82,7 +84,7 @@ class OrganizationProvisioner
                 ]
             );
 
-            \App\Modules\Support\Models\SlaPolicy::query()->firstOrCreate(
+            SlaPolicy::query()->firstOrCreate(
                 [
                     'organization_id' => $organization->getKey(),
                     'name' => 'Prioritas',

@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Modules\Tenancy\Models\Organization;
 use App\Modules\Tenancy\Models\TripayTransaction;
+use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 
 class OwnerPaymentController extends Controller
 {
-    public function show(Request $request, Organization $organization): View|RedirectResponse
+    public function show(Request $request, Organization $organization): ViewContract|RedirectResponse
     {
         $user = $request->user();
         $membership = $user?->membershipFor($organization);
@@ -28,7 +28,10 @@ class OwnerPaymentController extends Controller
         $planKey = is_string($organization->plan) ? $organization->plan : $organization->plan->value;
         $amount = $planPrices[$planKey] ?? 150000;
 
-        return view('owner.payment', [
+        /** @var view-string $view */
+        $view = 'owner.payment';
+
+        return view($view, [
             'organization' => $organization,
             'plan' => $planKey,
             'amount' => $amount,
