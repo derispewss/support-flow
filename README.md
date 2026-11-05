@@ -130,6 +130,18 @@ docker-compose up -d --build
 
 The `app` entrypoint creates `.env` if needed, installs Composer dependencies on first boot, generates `APP_KEY`, waits for MySQL, and runs migrations. `worker` and `scheduler` reuse the same image and skip migrations. Nginx resolves the `app` container through Docker DNS, so it survives container recreation.
 
+## Production deployment
+
+The CI workflow publishes the application and Nginx images to GHCR after the quality checks pass. On the server, copy `.env.production.example` to `.env`, set the production values (including a persistent `APP_KEY`), log in to GHCR if the packages are private, then run:
+
+```sh
+docker login ghcr.io
+docker-compose -f docker-compose.production.yml pull
+docker-compose -f docker-compose.production.yml up -d
+```
+
+The production Compose file has no build steps or source-code bind mounts. Updating the release only requires changing `APP_IMAGE` and `WEB_IMAGE` in `.env` when using a non-`latest` tag, then running `pull` and `up -d` again.
+
 ## Demo accounts
 
 All demo accounts use the password `Password123` and belong to **PT Contoh Nusantara**.
