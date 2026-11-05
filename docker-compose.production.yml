@@ -14,6 +14,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      mailpit:
+        condition: service_started
 
   worker:
     image: ${APP_IMAGE:?APP_IMAGE is required}
@@ -29,6 +31,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      mailpit:
+        condition: service_started
 
   scheduler:
     image: ${APP_IMAGE:?APP_IMAGE is required}
@@ -44,6 +48,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      mailpit:
+        condition: service_started
 
   web:
     image: ${WEB_IMAGE:?WEB_IMAGE is required}
@@ -53,7 +59,7 @@ services:
       - app
 
   db:
-    image: mysql:8.4
+    image: ${DB_IMAGE:-mysql:8.4}
     environment:
       MYSQL_DATABASE: ${DB_DATABASE:?DB_DATABASE is required}
       MYSQL_USER: ${DB_USERNAME:?DB_USERNAME is required}
@@ -68,7 +74,7 @@ services:
       retries: 20
 
   redis:
-    image: redis:7-alpine
+    image: ${REDIS_IMAGE:-redis:7-alpine}
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redis_data:/data
@@ -77,6 +83,9 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
+
+  mailpit:
+    image: ${MAIL_IMAGE:-axllent/mailpit:latest}
 
 volumes:
   app_storage:

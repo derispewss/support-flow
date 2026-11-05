@@ -132,7 +132,7 @@ The `app` entrypoint creates `.env` if needed, installs Composer dependencies on
 
 ## Production deployment
 
-The CI workflow publishes the application and Nginx images to GHCR after the quality checks pass. On the server, copy `.env.production.example` to `.env`, set the production values (including a persistent `APP_KEY`), log in to GHCR if the packages are private, then run:
+The CI workflow publishes the application and Nginx images to GHCR after the quality checks pass. MySQL, Redis, and Mailpit use their upstream images and can also be replaced through `DB_IMAGE`, `REDIS_IMAGE`, and `MAIL_IMAGE`. On the server, copy `.env.production.example` to `.env`, set the production values (including a persistent `APP_KEY`), log in to GHCR if the packages are private, then run:
 
 ```sh
 docker login ghcr.io
