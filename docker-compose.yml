@@ -1,0 +1,141 @@
+name: projects-pss
+
+x-app-environment: &app-environment
+  APP_ENV: local
+  APP_DEBUG: "true"
+  APP_URL: http://localhost:8080
+  DB_CONNECTION: mysql
+  DB_HOST: db
+  DB_PORT: "3306"
+  DB_DATABASE: laravel
+  DB_USERNAME: laravel
+  DB_PASSWORD: laravel
+  REDIS_CLIENT: phpredis
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  CACHE_STORE: redis
+  SESSION_DRIVER: redis
+  QUEUE_CONNECTION: redis
+  MAIL_MAILER: smtp
+  MAIL_HOST: mailpit
+  MAIL_PORT: "1025"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    image: projects-pss-app
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      <<: *app-environment
+      RUN_MIGRATIONS: "1"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    image: projects-pss-app
+    command: ["php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--max-time=3600"]
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      <<: *app-environment
+      RUN_MIGRATIONS: "0"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    image: projects-pss-app
+    command: ["php", "artisan", "schedule:work"]
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      <<: *app-environment
+      RUN_MIGRATIONS: "0"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  web:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    environment:
+      MP_MAX_MESSAGES: 500
+
+  vite:
+    image: node:22-alpine
+    working_dir: /var/www/html
+    command: sh -c "[ -f node_modules/.package-lock.json ] || npm ci --no-audit --no-fund; npm run dev -- --host 0.0.0.0"
+    volumes:
+      - ./src:/var/www/html
+      - node_modules:/var/www/html/node_modules
+    ports:
+      - "5173:5173"
+
+volumes:
+  db_data:
+  redis_data:
+  node_modules:

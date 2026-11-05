@@ -1,0 +1,35 @@
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+
+# macOS and editor files
+.DS_Store
+.idea/
+.vscode/
+.agents/
+docs/
+
+# Local API client exports
+postman/
+*.postman_collection.json
+*.postman_environment.json
+
+# Docker and local runtime data
+docker-compose.override.yml
+*.log
+
+# Laravel and frontend artifacts
+src/vendor/
+src/node_modules/
+src/public/build/
+src/public/hot
+src/public/storage
+src/storage/*.key
+src/storage/logs/*
+src/storage/framework/cache/data/*
+src/storage/framework/sessions/*
+src/storage/framework/views/*
+src/bootstrap/cache/*
+src/.phpunit.cache/
+src/.phpunit.result.cache

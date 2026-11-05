@@ -1,0 +1,2294 @@
+{
+    "openapi": "3.1.2",
+    "info": {
+        "title": "SupportFlow",
+        "version": "0.0.1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080/api"
+        }
+    ],
+    "paths": {
+        "/v1/auth/register": {
+            "post": {
+                "operationId": "v1.auth.register",
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "user": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {},
+                                                        "name": {
+                                                            "type": "string"
+                                                        },
+                                                        "email": {
+                                                            "type": "string"
+                                                        },
+                                                        "email_verified_at": {
+                                                            "type": [
+                                                                "string",
+                                                                "null"
+                                                            ]
+                                                        },
+                                                        "locale": {
+                                                            "type": "string"
+                                                        },
+                                                        "timezone": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "id",
+                                                        "name",
+                                                        "email",
+                                                        "email_verified_at",
+                                                        "locale",
+                                                        "timezone"
+                                                    ]
+                                                },
+                                                "token": {
+                                                    "type": "string"
+                                                },
+                                                "token_type": {
+                                                    "type": "string",
+                                                    "const": "Bearer"
+                                                },
+                                                "memberships": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "organization_id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "organization_name": {
+                                                                "type": "string"
+                                                            },
+                                                            "organization_slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "role": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "owner",
+                                                                    "admin",
+                                                                    "agent",
+                                                                    "customer"
+                                                                ]
+                                                            },
+                                                            "status": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "active",
+                                                                    "invited",
+                                                                    "suspended"
+                                                                ]
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "organization_id",
+                                                            "organization_name",
+                                                            "organization_slug",
+                                                            "role",
+                                                            "status"
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "user",
+                                                "token",
+                                                "token_type",
+                                                "memberships"
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Registered"
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/v1/auth/login": {
+            "post": {
+                "operationId": "v1.auth.login",
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "user": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {},
+                                                        "name": {
+                                                            "type": "string"
+                                                        },
+                                                        "email": {
+                                                            "type": "string"
+                                                        },
+                                                        "email_verified_at": {
+                                                            "type": [
+                                                                "string",
+                                                                "null"
+                                                            ]
+                                                        },
+                                                        "locale": {
+                                                            "type": "string"
+                                                        },
+                                                        "timezone": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "id",
+                                                        "name",
+                                                        "email",
+                                                        "email_verified_at",
+                                                        "locale",
+                                                        "timezone"
+                                                    ]
+                                                },
+                                                "token": {
+                                                    "type": "string"
+                                                },
+                                                "token_type": {
+                                                    "type": "string",
+                                                    "const": "Bearer"
+                                                },
+                                                "memberships": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "organization_id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "organization_name": {
+                                                                "type": "string"
+                                                            },
+                                                            "organization_slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "role": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "owner",
+                                                                    "admin",
+                                                                    "agent",
+                                                                    "customer"
+                                                                ]
+                                                            },
+                                                            "status": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "active",
+                                                                    "invited",
+                                                                    "suspended"
+                                                                ]
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "organization_id",
+                                                            "organization_name",
+                                                            "organization_slug",
+                                                            "role",
+                                                            "status"
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "user",
+                                                "token",
+                                                "token_type",
+                                                "memberships"
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Logged in"
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/v1/auth/forgot-password": {
+            "post": {
+                "operationId": "v1.auth.password.email",
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "maxLength": 191
+                                    }
+                                },
+                                "required": [
+                                    "email"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Jika email terdaftar, tautan reset password sudah dikirim."
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/v1/auth/reset-password": {
+            "post": {
+                "operationId": "v1.auth.password.store",
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "token": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "maxLength": 191
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "token",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Password berhasil diperbarui."
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/v1/auth/me": {
+            "get": {
+                "operationId": "v1.auth.me",
+                "tags": [
+                    "Auth"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "user": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {},
+                                                        "name": {
+                                                            "type": "string"
+                                                        },
+                                                        "email": {
+                                                            "type": "string"
+                                                        },
+                                                        "email_verified_at": {
+                                                            "type": [
+                                                                "string",
+                                                                "null"
+                                                            ]
+                                                        },
+                                                        "locale": {
+                                                            "type": "string"
+                                                        },
+                                                        "timezone": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "id",
+                                                        "name",
+                                                        "email",
+                                                        "email_verified_at",
+                                                        "locale",
+                                                        "timezone"
+                                                    ]
+                                                },
+                                                "memberships": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "organization_id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "organization_name": {
+                                                                "type": "string"
+                                                            },
+                                                            "organization_slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "role": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "owner",
+                                                                    "admin",
+                                                                    "agent",
+                                                                    "customer"
+                                                                ]
+                                                            },
+                                                            "status": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "active",
+                                                                    "invited",
+                                                                    "suspended"
+                                                                ]
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "organization_id",
+                                                            "organization_name",
+                                                            "organization_slug",
+                                                            "role",
+                                                            "status"
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "user",
+                                                "memberships"
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "const": "OK"
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/auth/logout": {
+            "post": {
+                "operationId": "v1.auth.logout",
+                "tags": [
+                    "Auth"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Logged out"
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/tickets": {
+            "get": {
+                "operationId": "v1.tickets.index",
+                "tags": [
+                    "Ticket"
+                ],
+                "parameters": [
+                    {
+                        "name": "include",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated set of `TicketResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "allOf": [
+                                                    {
+                                                        "$ref": "#/components/schemas/TicketResource"
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "required": [
+                                                            "category",
+                                                            "requester",
+                                                            "assignee",
+                                                            "tags"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "first": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "last": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "prev": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "next": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "first",
+                                                "last",
+                                                "prev",
+                                                "next"
+                                            ]
+                                        },
+                                        "meta": {
+                                            "type": "object",
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer",
+                                                    "minimum": 1
+                                                },
+                                                "from": {
+                                                    "type": [
+                                                        "integer",
+                                                        "null"
+                                                    ],
+                                                    "minimum": 1
+                                                },
+                                                "last_page": {
+                                                    "type": "integer",
+                                                    "minimum": 1
+                                                },
+                                                "links": {
+                                                    "type": "array",
+                                                    "description": "Generated paginator links.",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "url": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "label": {
+                                                                "type": "string"
+                                                            },
+                                                            "active": {
+                                                                "type": "boolean"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "url",
+                                                            "label",
+                                                            "active"
+                                                        ]
+                                                    }
+                                                },
+                                                "path": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ],
+                                                    "description": "Base path for paginator generated URLs."
+                                                },
+                                                "per_page": {
+                                                    "type": "integer",
+                                                    "description": "Number of items shown per page.",
+                                                    "minimum": 0
+                                                },
+                                                "to": {
+                                                    "type": [
+                                                        "integer",
+                                                        "null"
+                                                    ],
+                                                    "description": "Number of the last item in the slice.",
+                                                    "minimum": 1
+                                                },
+                                                "total": {
+                                                    "type": "integer",
+                                                    "description": "Total number of items being paginated.",
+                                                    "minimum": 0
+                                                }
+                                            },
+                                            "required": [
+                                                "current_page",
+                                                "from",
+                                                "last_page",
+                                                "links",
+                                                "path",
+                                                "per_page",
+                                                "to",
+                                                "total"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "links",
+                                        "meta"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "An error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Error overview.",
+                                            "examples": [
+                                                ""
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "v1.tickets.store",
+                "tags": [
+                    "Ticket"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreTicketRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "`TicketResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/TicketResource"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "category",
+                                                        "requester",
+                                                        "assignee",
+                                                        "tags",
+                                                        "attachments"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/v1/tickets/{ticket}": {
+            "get": {
+                "operationId": "v1.tickets.show",
+                "tags": [
+                    "Ticket"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`TicketResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/TicketResource"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "category",
+                                                        "requester",
+                                                        "assignee",
+                                                        "tags",
+                                                        "attachments"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "put": {
+                "operationId": "v1.tickets.update",
+                "tags": [
+                    "Ticket"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateTicketRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "`TicketResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/TicketResource"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "category",
+                                                        "requester",
+                                                        "assignee",
+                                                        "tags"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "v1.tickets.destroy",
+                "tags": [
+                    "Ticket"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Tiket dihapus."
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/tickets/{ticket}/assign": {
+            "post": {
+                "operationId": "v1.tickets.assign",
+                "tags": [
+                    "Ticket"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ticket ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AssignTicketRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "`TicketResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/TicketResource"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "category",
+                                                        "requester",
+                                                        "assignee",
+                                                        "tags"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/v1/tickets/{ticket}/status": {
+            "patch": {
+                "operationId": "v1.tickets.status",
+                "tags": [
+                    "Ticket"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ticket ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TicketStatusRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "`TicketResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/TicketResource"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "category",
+                                                        "requester",
+                                                        "assignee",
+                                                        "tags"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/v1/tickets/{ticket}/attachments": {
+            "get": {
+                "operationId": "v1.tickets.attachments.index",
+                "tags": [
+                    "TicketAttachment"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of `AttachmentResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/AttachmentResource"
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "v1.tickets.attachments.store",
+                "tags": [
+                    "TicketAttachment"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "attachments": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary",
+                                            "contentMediaType": "application/octet-stream",
+                                            "description": "Maximum file size: 10240 kilobytes."
+                                        },
+                                        "minItems": 1,
+                                        "maxItems": 5
+                                    }
+                                },
+                                "required": [
+                                    "attachments"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Array of `AttachmentResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/AttachmentResource"
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/v1/tickets/{ticket}/attachments/{attachment}/download": {
+            "get": {
+                "operationId": "v1.tickets.attachments.download",
+                "tags": [
+                    "TicketAttachment"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "attachment",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/octet-stream": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "Transfer-Encoding": {
+                                "required": true,
+                                "schema": {
+                                    "type": "string",
+                                    "enum": [
+                                        "chunked"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/tickets/{ticket}/attachments/{attachment}": {
+            "delete": {
+                "operationId": "v1.tickets.attachments.destroy",
+                "tags": [
+                    "TicketAttachment"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "attachment",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Lampiran dihapus."
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/tickets/{ticket}/messages": {
+            "get": {
+                "operationId": "v1.tickets.messages.index",
+                "tags": [
+                    "TicketMessage"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of `TicketMessageResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "allOf": [
+                                                    {
+                                                        "$ref": "#/components/schemas/TicketMessageResource"
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "required": [
+                                                            "user",
+                                                            "attachments"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "v1.tickets.messages.store",
+                "tags": [
+                    "TicketMessage"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreTicketMessageRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "`TicketMessageResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/TicketMessageResource"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "user",
+                                                        "attachments"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/v1/tickets/{ticket}/watchers": {
+            "post": {
+                "operationId": "v1.tickets.watchers.store",
+                "tags": [
+                    "TicketWatcher"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ticket ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Watcher ditambahkan."
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/v1/tickets/{ticket}/watchers/{user}": {
+            "delete": {
+                "operationId": "v1.tickets.watchers.destroy",
+                "tags": [
+                    "TicketWatcher"
+                ],
+                "parameters": [
+                    {
+                        "name": "ticket",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ticket ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Watcher dihapus."
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AssignTicketRequest": {
+                "type": "object",
+                "properties": {
+                    "assignee_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "team_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    }
+                },
+                "title": "AssignTicketRequest"
+            },
+            "AttachmentResource": {
+                "type": "object",
+                "properties": {
+                    "id": {},
+                    "original_name": {
+                        "type": "string"
+                    },
+                    "mime_type": {
+                        "type": "string"
+                    },
+                    "size": {
+                        "type": "integer"
+                    },
+                    "human_size": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "id",
+                    "original_name",
+                    "mime_type",
+                    "size",
+                    "human_size",
+                    "created_at"
+                ],
+                "title": "AttachmentResource"
+            },
+            "CategoryResource": {
+                "type": "object",
+                "properties": {
+                    "id": {},
+                    "name": {
+                        "type": "string"
+                    },
+                    "slug": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "slug",
+                    "description",
+                    "is_active"
+                ],
+                "title": "CategoryResource"
+            },
+            "LoginRequest": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 191
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "device_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 120
+                    }
+                },
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "title": "LoginRequest"
+            },
+            "RegisterRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 120
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 191
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "organization_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 120
+                    },
+                    "device_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 120
+                    },
+                    "password_confirmation": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "email",
+                    "password",
+                    "password_confirmation"
+                ],
+                "title": "RegisterRequest"
+            },
+            "StoreTicketMessageRequest": {
+                "type": "object",
+                "properties": {
+                    "body": {
+                        "type": "string",
+                        "maxLength": 20000
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "reply",
+                            "note"
+                        ]
+                    },
+                    "is_internal": {
+                        "type": "boolean"
+                    },
+                    "attachments": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "binary",
+                            "contentMediaType": "application/octet-stream",
+                            "description": "Maximum file size: 10240 kilobytes."
+                        },
+                        "maxItems": 5
+                    }
+                },
+                "required": [
+                    "body"
+                ],
+                "title": "StoreTicketMessageRequest"
+            },
+            "StoreTicketRequest": {
+                "type": "object",
+                "properties": {
+                    "subject": {
+                        "type": "string",
+                        "maxLength": 150
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 20000
+                    },
+                    "priority": {
+                        "$ref": "#/components/schemas/TicketPriority"
+                    },
+                    "channel": {
+                        "type": "string",
+                        "enum": [
+                            "web",
+                            "email",
+                            "api",
+                            "portal"
+                        ]
+                    },
+                    "category_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "team_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "tag_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "maxItems": 10
+                    },
+                    "attachments": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "binary",
+                            "contentMediaType": "application/octet-stream",
+                            "description": "Maximum file size: 10240 kilobytes."
+                        },
+                        "maxItems": 5
+                    }
+                },
+                "required": [
+                    "subject",
+                    "description"
+                ],
+                "title": "StoreTicketRequest"
+            },
+            "TagResource": {
+                "type": "object",
+                "properties": {
+                    "id": {},
+                    "name": {
+                        "type": "string"
+                    },
+                    "color": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "color"
+                ],
+                "title": "TagResource"
+            },
+            "TicketMessageResource": {
+                "type": "object",
+                "properties": {
+                    "id": {},
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "reply",
+                            "note",
+                            "event"
+                        ]
+                    },
+                    "type_label": {
+                        "type": "string",
+                        "enum": [
+                            "Balasan",
+                            "Catatan internal",
+                            "Peristiwa"
+                        ]
+                    },
+                    "body": {
+                        "type": "string"
+                    },
+                    "is_internal": {
+                        "type": "boolean"
+                    },
+                    "user": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/UserSummaryResource"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "attachments": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AttachmentResource"
+                        }
+                    },
+                    "created_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "id",
+                    "type",
+                    "type_label",
+                    "body",
+                    "is_internal",
+                    "created_at"
+                ],
+                "title": "TicketMessageResource"
+            },
+            "TicketPriority": {
+                "type": "string",
+                "enum": [
+                    "low",
+                    "normal",
+                    "high",
+                    "urgent"
+                ],
+                "title": "TicketPriority"
+            },
+            "TicketResource": {
+                "type": "object",
+                "properties": {
+                    "id": {},
+                    "ticket_number": {
+                        "type": "string"
+                    },
+                    "subject": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "new",
+                            "open",
+                            "pending",
+                            "resolved",
+                            "closed"
+                        ]
+                    },
+                    "status_label": {
+                        "type": "string",
+                        "enum": [
+                            "Baru",
+                            "Terbuka",
+                            "Menunggu",
+                            "Selesai",
+                            "Ditutup"
+                        ]
+                    },
+                    "priority": {
+                        "type": "string",
+                        "enum": [
+                            "low",
+                            "normal",
+                            "high",
+                            "urgent"
+                        ]
+                    },
+                    "priority_label": {
+                        "type": "string",
+                        "enum": [
+                            "Rendah",
+                            "Normal",
+                            "Tinggi",
+                            "Mendesak"
+                        ]
+                    },
+                    "channel": {
+                        "type": "string",
+                        "enum": [
+                            "web",
+                            "email",
+                            "api",
+                            "portal"
+                        ]
+                    },
+                    "category": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/CategoryResource"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "requester": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/UserSummaryResource"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "assignee": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/UserSummaryResource"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TagResource"
+                        }
+                    },
+                    "attachments": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AttachmentResource"
+                        }
+                    },
+                    "first_response_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "first_response_due_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "due_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "sla_breached_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "resolved_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "closed_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "last_activity_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "satisfaction_rating": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "created_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "updated_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "id",
+                    "ticket_number",
+                    "subject",
+                    "description",
+                    "status",
+                    "status_label",
+                    "priority",
+                    "priority_label",
+                    "channel",
+                    "first_response_at",
+                    "first_response_due_at",
+                    "due_at",
+                    "sla_breached_at",
+                    "resolved_at",
+                    "closed_at",
+                    "last_activity_at",
+                    "satisfaction_rating",
+                    "created_at",
+                    "updated_at"
+                ],
+                "title": "TicketResource"
+            },
+            "TicketStatus": {
+                "type": "string",
+                "enum": [
+                    "new",
+                    "open",
+                    "pending",
+                    "resolved",
+                    "closed"
+                ],
+                "title": "TicketStatus"
+            },
+            "TicketStatusRequest": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "$ref": "#/components/schemas/TicketStatus"
+                    },
+                    "note": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 1000
+                    }
+                },
+                "required": [
+                    "status"
+                ],
+                "title": "TicketStatusRequest"
+            },
+            "UpdateTicketRequest": {
+                "type": "object",
+                "properties": {
+                    "subject": {
+                        "type": "string",
+                        "maxLength": 150
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 20000
+                    },
+                    "priority": {
+                        "$ref": "#/components/schemas/TicketPriority"
+                    },
+                    "category_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "assignee_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "tag_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "maxItems": 10
+                    }
+                },
+                "title": "UpdateTicketRequest"
+            },
+            "UserSummaryResource": {
+                "type": "object",
+                "properties": {
+                    "id": {},
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "initials": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "initials"
+                ],
+                "title": "UserSummaryResource"
+            }
+        },
+        "responses": {
+            "ValidationException": {
+                "description": "Validation error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Errors overview."
+                                },
+                                "errors": {
+                                    "type": "object",
+                                    "description": "A detailed description of each field that failed validation.",
+                                    "additionalProperties": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "message",
+                                "errors"
+                            ]
+                        }
+                    }
+                }
+            },
+            "AuthenticationException": {
+                "description": "Unauthenticated",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            },
+            "AuthorizationException": {
+                "description": "Authorization error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            },
+            "ModelNotFoundException": {
+                "description": "Not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,309 @@
+@import 'tailwindcss';
+@import '../../vendor/tallstackui/tallstackui/css/v4.css';
+
+@plugin '@tailwindcss/typography';
+
+@source '../../vendor/tallstackui/tallstackui/**/*.php';
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --color-paper: #f4f4f5;
+    --color-paper-raised: #ffffff;
+    --color-sidebar: #f4f4f5;
+    --color-ink: #09090b;
+    --color-ink-soft: #3f3f46;
+    --color-ink-faint: #71717a;
+    --color-rule: #e4e4e7;
+    --color-rule-strong: #d4d4d8;
+    --color-signal: #e04f26;
+    --color-signal-dark: #c23d17;
+    --color-signal-soft: #fff2ed;
+    --color-signal-tint: #fff2ed;
+    --color-pine: #0d7a5f;
+    --color-pine-soft: #ecfdf5;
+    --color-pine-tint: #ecfdf5;
+    --color-ochre: #b45309;
+    --color-ochre-soft: #fffbeb;
+    --color-ochre-tint: #fffbeb;
+    --color-steel: #1d63b8;
+    --color-steel-soft: #eff6ff;
+    --color-steel-tint: #eff6ff;
+}
+
+@layer base {
+    html {
+        -webkit-tap-highlight-color: transparent;
+        font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    }
+
+    body {
+        @apply bg-paper font-sans text-ink antialiased;
+    }
+
+    ::selection {
+        @apply bg-signal/15 text-ink;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-ink);
+        outline-offset: 2px;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    summary::-webkit-details-marker {
+        display: none;
+    }
+}
+
+@layer components {
+    .sheet {
+        @apply rounded-xl border border-rule bg-paper-raised;
+        box-shadow: 0 1px 2px 0 rgb(15 23 42 / 0.03), 0 1px 3px 0 rgb(15 23 42 / 0.04);
+    }
+
+    .sheet-interactive {
+        @apply rounded-xl border border-rule bg-paper-raised transition-all duration-150 hover:border-rule-strong;
+        box-shadow: 0 1px 2px 0 rgb(15 23 42 / 0.03);
+    }
+
+    .sheet-interactive:hover {
+        box-shadow: 0 4px 12px -2px rgb(15 23 42 / 0.06), 0 2px 4px -2px rgb(15 23 42 / 0.04);
+    }
+
+    .label-mono {
+        @apply font-sans text-xs font-medium tracking-normal text-ink-faint;
+    }
+
+    .field-label {
+        @apply block font-sans text-xs font-medium text-ink;
+    }
+
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 font-sans text-sm font-medium leading-5 transition-all duration-150 select-none;
+        min-height: 40px;
+    }
+
+    .btn-sm {
+        @apply px-3 py-1.5 text-xs;
+        min-height: 34px;
+    }
+
+    .btn-signal {
+        @apply border-signal bg-signal text-paper-raised shadow-xs hover:border-signal-dark hover:bg-signal-dark;
+    }
+
+    .btn-ink {
+        @apply border-ink bg-ink text-paper-raised shadow-xs hover:border-ink-soft hover:bg-ink-soft;
+    }
+
+    .btn-outline {
+        @apply border-rule-strong bg-paper-raised text-ink shadow-2xs hover:border-ink/40 hover:bg-paper;
+    }
+
+    .btn-outline-light {
+        @apply border-paper/25 bg-paper/5 text-paper hover:border-paper/60 hover:bg-paper hover:text-ink;
+    }
+
+    .btn-ghost {
+        @apply border-transparent bg-transparent text-ink-soft hover:bg-paper hover:text-ink;
+    }
+
+    .field {
+        @apply block w-full rounded-lg border border-rule-strong bg-paper-raised px-3.5 py-2 text-sm text-ink placeholder:text-ink-faint transition-colors focus:border-ink focus:outline-none focus:ring-3 focus:ring-ink/10;
+        min-height: 40px;
+    }
+
+    textarea.field {
+        min-height: auto;
+    }
+
+    .stamp {
+        @apply inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 font-sans text-xs font-medium leading-4;
+    }
+
+    .table-scroll {
+        @apply w-full overflow-x-auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .admin-shell {
+        position: relative;
+        display: flex;
+        min-height: 100vh;
+        min-height: 100dvh;
+        width: 100%;
+        background-color: var(--color-sidebar);
+        transition: padding-left 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .admin-sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: auto;
+        z-index: 40;
+        display: flex;
+        width: 260px;
+        max-width: calc(100vw - 3rem);
+        height: 100vh;
+        height: 100dvh;
+        flex: 0 0 260px;
+        flex-direction: column;
+        overflow: hidden;
+        background-color: var(--color-sidebar);
+        color: var(--color-ink);
+        border-right: 1px solid var(--color-rule);
+        box-shadow: 0 20px 25px -5px rgb(9 9 11 / 0.12), 0 8px 10px -6px rgb(9 9 11 / 0.08);
+        transform: translateX(-100%);
+        visibility: hidden;
+        transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), visibility 200ms ease;
+    }
+
+    .admin-sidebar.sidebar-open {
+        transform: translateX(0);
+        visibility: visible;
+    }
+
+    .admin-sidebar__header,
+    .admin-sidebar__footer,
+    .admin-sidebar__header > a,
+    .admin-sidebar__footer > div {
+        min-width: 0;
+    }
+
+    .admin-topbar {
+        isolation: isolate;
+    }
+
+    .admin-mobile-only {
+        display: inline-grid;
+    }
+
+    .admin-desktop-only {
+        display: none;
+    }
+
+    .admin-backdrop {
+        display: block;
+    }
+
+    .admin-nav {
+        flex: 1 1 0%;
+        min-width: 0;
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+        scrollbar-color: rgb(9 9 11 / 0.14) transparent;
+    }
+
+    .admin-nav::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .admin-nav::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .admin-nav::-webkit-scrollbar-thumb {
+        background-color: rgb(9 9 11 / 0.14);
+        border-radius: 9999px;
+    }
+
+    .admin-main {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        width: 100%;
+        flex: 1 1 0%;
+        flex-direction: column;
+        background-color: var(--color-paper-raised);
+    }
+
+    .admin-main > main {
+        min-width: 0;
+        overflow-x: clip;
+    }
+
+    .admin-main > main > * {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    @media (min-width: 1024px) {
+        .admin-shell {
+            padding-left: 260px;
+        }
+
+        .admin-shell.sidebar-collapsed {
+            padding-left: 0;
+        }
+
+        .admin-mobile-only,
+        .admin-backdrop {
+            display: none !important;
+        }
+
+        .admin-desktop-only {
+            display: inline-grid !important;
+        }
+
+        .admin-sidebar {
+            position: fixed !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: auto !important;
+            z-index: 30;
+            display: flex !important;
+            width: 260px !important;
+            max-width: none !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            flex: 0 0 260px !important;
+            border-right-color: transparent !important;
+            transform: translateX(0) !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            box-shadow: none !important;
+        }
+
+        .admin-shell.sidebar-collapsed .admin-sidebar {
+            transform: translateX(-100%) !important;
+            visibility: hidden !important;
+        }
+
+        .admin-main {
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            min-height: calc(100dvh - 1rem);
+            border-radius: 0.75rem;
+            border: 1px solid var(--color-rule);
+            background-color: var(--color-paper-raised);
+            box-shadow: 0 1px 2px 0 rgb(9 9 11 / 0.04);
+            transition: margin-left 200ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .admin-shell.sidebar-collapsed .admin-main {
+            margin-left: 0.5rem;
+        }
+
+        .admin-topbar {
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+        }
+    }
+
+    .display-cut {
+        text-wrap: balance;
+    }
+}
