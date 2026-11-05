@@ -14,8 +14,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      mailpit:
-        condition: service_started
 
   worker:
     image: ${APP_IMAGE:?APP_IMAGE is required}
@@ -31,8 +29,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      mailpit:
-        condition: service_started
 
   scheduler:
     image: ${APP_IMAGE:?APP_IMAGE is required}
@@ -48,8 +44,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      mailpit:
-        condition: service_started
 
   web:
     image: ${WEB_IMAGE:?WEB_IMAGE is required}
@@ -83,9 +77,6 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
-
-  mailpit:
-    image: ${MAIL_IMAGE:-axllent/mailpit:latest}
 
 volumes:
   app_storage:
