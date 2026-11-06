@@ -1,4 +1,4 @@
-FROM php:8.4-fpm
+FROM php:8.4-fpm AS app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         git unzip nginx supervisor libpng-dev libonig-dev libzip-dev libsqlite3-dev default-mysql-client \
@@ -22,6 +22,22 @@ COPY src/ ./
 RUN composer install --no-dev --no-interaction --prefer-dist --no-progress --optimize-autoloader
 RUN rm -f /etc/nginx/sites-enabled/default
 RUN sed -i 's|listen = 9000|listen = 127.0.0.1:9001|' /usr/local/etc/php-fpm.d/docker.conf
+
+FROM node:22-alpine AS frontend
+
+WORKDIR /var/www/html
+
+COPY src/package.json src/package-lock.json ./
+RUN npm ci --no-audit --no-fund
+
+COPY --from=app /var/www/html/resources ./resources
+COPY --from=app /var/www/html/vite.config.js ./vite.config.js
+COPY --from=app /var/www/html/vendor/tallstackui ./vendor/tallstackui
+RUN npm run build
+
+FROM app
+
+COPY --from=frontend /var/www/html/public/build ./public/build
 
 EXPOSE 9000
 

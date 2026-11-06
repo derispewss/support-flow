@@ -20,6 +20,8 @@ if ! grep -q '^APP_KEY=base64:' .env; then
     php artisan key:generate --ansi
 fi
 
+php artisan storage:link --force --ansi
+
 flock -u 9
 
 chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
