@@ -132,7 +132,7 @@ The `app` entrypoint creates `.env` if needed, installs Composer dependencies on
 
 ## Production deployment
 
-The CI workflow publishes the application and Nginx images to GHCR after the quality checks pass. MySQL, Redis, and Mailpit use their upstream images and can also be replaced through `DB_IMAGE`, `REDIS_IMAGE`, and `MAIL_IMAGE`. On the server, copy `.env.production.example` to `.env`, set the production values (including a persistent `APP_KEY`), log in to GHCR if the packages are private, then run:
+The CI workflow publishes one application image containing PHP-FPM and Nginx to GHCR after the quality checks pass. MySQL and Redis use their upstream images and can also be replaced through `DB_IMAGE` and `REDIS_IMAGE`. On the server, copy `.env.production.example` to `.env`, set the production values (including a persistent `APP_KEY`), log in to GHCR if the package is private, then run:
 
 ```sh
 docker login ghcr.io
@@ -140,7 +140,7 @@ docker-compose -f docker-compose.production.yml pull
 docker-compose -f docker-compose.production.yml up -d
 ```
 
-The production Compose file has no build steps or source-code bind mounts. Updating the release only requires changing `APP_IMAGE` and `WEB_IMAGE` in `.env` when using a non-`latest` tag, then running `pull` and `up -d` again.
+The production Compose file has no build steps or source-code bind mounts. The application image includes the reverse proxy and listens on container port 80. Updating the release only requires changing `APP_IMAGE` in `.env` when using a non-`latest` tag, then running `pull` and `up -d` again.
 
 ## Demo accounts
 
