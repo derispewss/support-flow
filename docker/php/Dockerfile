@@ -22,5 +22,7 @@ COPY src/ ./
 RUN composer install --no-dev --no-interaction --prefer-dist --no-progress --optimize-autoloader
 RUN rm -f /etc/nginx/sites-enabled/default
 
+EXPOSE 80
+
 ENTRYPOINT ["entrypoint"]
 CMD ["supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
