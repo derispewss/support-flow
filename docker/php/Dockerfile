@@ -21,8 +21,9 @@ WORKDIR /var/www/html
 COPY src/ ./
 RUN composer install --no-dev --no-interaction --prefer-dist --no-progress --optimize-autoloader
 RUN rm -f /etc/nginx/sites-enabled/default
+RUN sed -i 's|listen = 9000|listen = 127.0.0.1:9001|' /usr/local/etc/php-fpm.d/docker.conf
 
-EXPOSE 80
+EXPOSE 9000
 
 ENTRYPOINT ["entrypoint"]
 CMD ["supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
